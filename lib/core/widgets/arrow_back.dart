@@ -4,9 +4,11 @@ import 'package:bookia/feature/intro/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class ArrowBack extends StatelessWidget {
-  const ArrowBack({
+   ArrowBack({
     super.key,
+    required this.onPressed,
   });
+  Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,7 @@ class ArrowBack extends StatelessWidget {
             color: AppColors.darkColor,
             size: 20,
           ),
-          onPressed: () {
-            context.pushReplacement(const WelcomeScreen());
-          },
+          onPressed: onPressed,
         ),
       ),
     );
