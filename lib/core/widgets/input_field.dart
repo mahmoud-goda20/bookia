@@ -9,15 +9,18 @@ class InputField extends StatelessWidget {
     this.isPasword ,
     this.visibleIcon,
     this.validator,
+    this.controller,
   });
   String hint;
   bool? isPasword ;
   Widget? visibleIcon;
   String? Function(String?)? validator;
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller:controller ,
       validator:validator ,
       obscureText: isPasword??false,
       decoration: InputDecoration(
