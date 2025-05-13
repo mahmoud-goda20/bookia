@@ -1,7 +1,6 @@
 import 'package:bookia/core/constans/app_const.dart';
 import 'package:flutter/material.dart';
 
-
 TextStyle getHeadLineTextStyle(BuildContext context,
     {double? fontSize, Color? color, FontWeight? fontWeight}) {
   return TextStyle(
@@ -10,6 +9,7 @@ TextStyle getHeadLineTextStyle(BuildContext context,
     color: color ?? Theme.of(context).colorScheme.onSurface,
   );
 }
+
 TextStyle getTitleTextStyle(BuildContext context,
     {double? fontSize, Color? color, FontWeight? fontWeight}) {
   return TextStyle(

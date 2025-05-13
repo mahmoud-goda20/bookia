@@ -15,8 +15,8 @@ import 'package:bookia/feature/auth/presentation/page/forget_screen.dart';
 import 'package:bookia/feature/auth/presentation/page/register_screen.dart';
 import 'package:bookia/feature/auth/presentation/widget/scial_widget.dart';
 import 'package:bookia/feature/intro/welcome_screen.dart';
+import 'package:bookia/feature/main/main_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -31,6 +31,10 @@ class LoginScreen extends StatefulWidget {
 bool isVisble = true;
 
 class _LoginScreenState extends State<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,142 +47,137 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
       ),
-      body: BlocConsumer<AuthCubit, AuthState>(
+      body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccessState) {
             Navigator.pop(context);
             log("Success");
+            context.pushAndRemoveUntil(const MainScreen());
           } else if (state is AuthErrorState) {
             Navigator.pop(context);
-            showError(context, state.error);
+            showToast(context, state.error);
           } else if (state is AuthLoadingState) {
             showLoadingDialog(context);
           }
         },
-        builder: (context, state) {
-          var cubit = context.read<AuthCubit>();
-          return Padding(
-            padding: const EdgeInsets.all(22),
-            child: SingleChildScrollView(
-              child: Form(
-                key: cubit.formKey,
-                child: Column(
-                  children: [
-                    Text(
-                      "Welcome back! Glad to see you, Again!",
-                      style: getHeadLineTextStyle(context),
-                    ),
-                    const Gap(32),
-                    InputField(
-                      controller: cubit.emailController,
-                      hint: "Enter your email",
-                      validator: (p0) {
-                        if (p0!.isEmpty) {
-                          return "Email is required";
-                        } else if (!RegExp(
-                                "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                            .hasMatch(p0)) {
-                          return "Enter valid email";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    const Gap(15),
-                    InputField(
-                      controller: cubit.passwordController,
-                      hint: "Enter your password",
-                      validator: (p0) {
-                        if (p0!.isEmpty) {
-                          return "Password is required";
-                        } else if (p0.length < 6) {
-                          return "Password must be at least 6 characters";
-                        } else {
-                          return null;
-                        }
-                      },
-                      isPasword: isVisble,
-                      visibleIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isVisble = !isVisble;
-                            });
-                          },
-                          icon: Icon(
-                              color: AppColors.greyColor,
-                              isVisble
-                                  ? Icons.visibility_off
-                                  : Icons.visibility)),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              context.pushTo(const ForgetScreen());
-                            },
-                            child: Text(
-                              "Forgot Password?",
-                              style: getSmallTextStyle(context,
-                                  fontSize: 15, color: AppColors.primaryColor),
-                            )),
-                      ],
-                    ),
-                    const Gap(62),
-                    CustomButton(
-                        text: "Login",
+        child: Padding(
+          padding: const EdgeInsets.all(22),
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Text(
+                    "Welcome back! Glad to see you, Again!",
+                    style: getHeadLineTextStyle(context),
+                  ),
+                  const Gap(32),
+                  InputField(
+                    controller: emailController,
+                    hint: "Enter your email",
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return "Email is required";
+                      } else if (!RegExp(
+                              "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                          .hasMatch(p0)) {
+                        return "Enter valid email";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const Gap(15),
+                  InputField(
+                    controller: passwordController,
+                    hint: "Enter your password",
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return "Password is required";
+                      } else if (p0.length < 6) {
+                        return "Password must be at least 6 characters";
+                      } else {
+                        return null;
+                      }
+                    },
+                    isPasword: isVisble,
+                    visibleIcon: IconButton(
                         onPressed: () {
-                          if (cubit.formKey.currentState!.validate()) {
-                            cubit.login(AuthParams(
-                              email: cubit.emailController.text,
-                              password: cubit.passwordController.text,
-                            ));
-                          }
-                          log("Login");
-
-                      
-                        }),
-                    const Gap(34),
-                    Row(
-                      children: [
-                        const Expanded(child: Divider()),
-                        Text("Or Login with",
+                          setState(() {
+                            isVisble = !isVisble;
+                          });
+                        },
+                        icon: Icon(
+                            color: AppColors.greyColor,
+                            isVisble
+                                ? Icons.visibility_off
+                                : Icons.visibility)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            context.pushTo(const ForgetScreen());
+                          },
+                          child: Text(
+                            "Forgot Password?",
                             style: getSmallTextStyle(context,
-                                color: AppColors.darkGreyColor)),
-                        const Expanded(child: Divider()),
-                      ],
-                    ),
-                    const Gap(21),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: ScialWidget(
-                                social: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: SvgPicture.asset(AppAssets.facebook),
-                        ))),
-                        const Gap(8),
-                        Expanded(
-                            child: ScialWidget(
-                                social: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: SvgPicture.asset(AppAssets.google),
-                        ))),
-                        const Gap(8),
-                        Expanded(
-                            child: ScialWidget(
-                                social: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: SvgPicture.asset(AppAssets.apple),
-                        ))),
-                      ],
-                    ),
-                  ],
-                ),
+                                fontSize: 15, color: AppColors.primaryColor),
+                          )),
+                    ],
+                  ),
+                  const Gap(62),
+                  CustomButton(
+                      text: "Login",
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          context.read<AuthCubit>().login(AuthParams(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ));
+                        }
+                      }),
+                  const Gap(34),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Text("Or Login with",
+                          style: getSmallTextStyle(context,
+                              color: AppColors.darkGreyColor)),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  const Gap(21),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ScialWidget(
+                              social: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: SvgPicture.asset(AppAssets.facebook),
+                      ))),
+                      const Gap(8),
+                      Expanded(
+                          child: ScialWidget(
+                              social: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: SvgPicture.asset(AppAssets.google),
+                      ))),
+                      const Gap(8),
+                      Expanded(
+                          child: ScialWidget(
+                              social: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: SvgPicture.asset(AppAssets.apple),
+                      ))),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.center,

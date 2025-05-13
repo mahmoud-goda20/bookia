@@ -3,28 +3,28 @@ import 'package:bookia/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-   InputField({
+  const InputField({
     super.key,
     required this.hint,
-    this.isPasword ,
+    this.isPasword,
     this.visibleIcon,
     this.validator,
     this.controller,
   });
-  String hint;
-  bool? isPasword ;
-  Widget? visibleIcon;
-  String? Function(String?)? validator;
-  TextEditingController? controller;
+  final String hint;
+  final bool? isPasword;
+  final Widget? visibleIcon;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller:controller ,
-      validator:validator ,
-      obscureText: isPasword??false,
+      controller: controller,
+      validator: validator,
+      obscureText: isPasword ?? false,
       decoration: InputDecoration(
-        suffixIcon:visibleIcon ,
+          suffixIcon: visibleIcon,
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: AppColors.borderColor)),

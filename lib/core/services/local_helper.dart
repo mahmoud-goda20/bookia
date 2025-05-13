@@ -2,7 +2,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalHelper {
   static late SharedPreferences prefs;
+
   static String tokenkey = 'token';
+
   static init() async {
     prefs = await SharedPreferences.getInstance();
   }

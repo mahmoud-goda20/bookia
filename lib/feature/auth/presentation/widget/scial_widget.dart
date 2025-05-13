@@ -2,11 +2,11 @@ import 'package:bookia/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ScialWidget extends StatelessWidget {
-  ScialWidget({
+  const ScialWidget({
     super.key,
     required this.social,
   });
-  Widget social;
+  final Widget social;
 
   @override
   Widget build(BuildContext context) {

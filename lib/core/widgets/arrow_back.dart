@@ -1,14 +1,12 @@
-import 'package:bookia/core/extentions/extentions.dart';
 import 'package:bookia/core/utils/app_colors.dart';
-import 'package:bookia/feature/intro/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class ArrowBack extends StatelessWidget {
-   ArrowBack({
+  const ArrowBack({
     super.key,
     required this.onPressed,
   });
-  Function() onPressed;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
